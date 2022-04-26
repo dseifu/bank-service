@@ -7,8 +7,6 @@ import com.dseifu.bank_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
-
 
 @Service
 public class UserService {
@@ -19,8 +17,7 @@ public class UserService {
     @Autowired
     private CardRepository cardRepository;
 
-    public String authenticateByPin(String pin, String cardNumber, HttpServletRequest request) {
-        Object isVerified = request.getSession().getAttribute("isVerified");
+    public String authenticateByPin(String pin, String cardNumber, String isVerified) {
         if(isVerified != null && isVerified.equals("true")) {
             try {
                 Card card = cardRepository.findByCardNumber(cardNumber);
@@ -29,7 +26,6 @@ public class UserService {
                     if(user.getNumberOfTrials()<3){
                         user.setNumberOfTrials(0);
                         userRepository.save(user);
-                        request.getSession().setAttribute("isAuthenticated","true");
                         return "Authenticated";
                     }
                     else
@@ -55,8 +51,7 @@ public class UserService {
 
     }
 
-    public String authenticateByFingerPrint(String fingerPrint, String cardNumber, HttpServletRequest request) {
-        Object isVerified = request.getSession().getAttribute("isVerified");
+    public String authenticateByFingerPrint(String fingerPrint, String cardNumber, String isVerified) {
         if(isVerified != null && isVerified.equals("true")) {
             try {
                 Card card = cardRepository.findByCardNumber(cardNumber);
@@ -65,7 +60,6 @@ public class UserService {
                     if(user.getNumberOfTrials()<3){
                         user.setNumberOfTrials(0);
                         userRepository.save(user);
-                        request.getSession().setAttribute("isAuthenticated","true");
                         return "Authenticated";
                     }
                     else

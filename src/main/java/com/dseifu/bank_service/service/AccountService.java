@@ -9,7 +9,6 @@ import com.dseifu.bank_service.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 
 @Service
 public class AccountService {
@@ -23,8 +22,7 @@ public class AccountService {
     @Autowired
     private UserRepository userRepository;
 
-    public String deposit(String cardNumber, String amount, HttpServletRequest request) {
-        Object isAuthenticated = request.getSession().getAttribute("isAuthenticated");
+    public String deposit(String cardNumber, String amount, String isAuthenticated) {
         if(isAuthenticated != null && isAuthenticated.equals("true")){
             try {
                 Card card = cardRepository.findByCardNumber(cardNumber);
@@ -42,8 +40,7 @@ public class AccountService {
 
     }
 
-    public String withdraw(String cardNumber, String amount, HttpServletRequest request) {
-        Object isAuthenticated = request.getSession().getAttribute("isAuthenticated");
+    public String withdraw(String cardNumber, String amount, String isAuthenticated) {
         if(isAuthenticated != null && isAuthenticated.equals("true")){
             try {
                 Card card = cardRepository.findByCardNumber(cardNumber);
@@ -65,8 +62,7 @@ public class AccountService {
             return "Not Authenticated";
     }
 
-    public String checkBalance(String cardNumber, HttpServletRequest request) {
-        Object isAuthenticated = request.getSession().getAttribute("isAuthenticated");
+    public String checkBalance(String cardNumber, String isAuthenticated) {
         if(isAuthenticated != null && isAuthenticated.equals("true")){
             try {
                 Card card = cardRepository.findByCardNumber(cardNumber);

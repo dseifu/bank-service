@@ -5,7 +5,6 @@ import com.dseifu.bank_service.repository.CardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -16,7 +15,7 @@ public class CardService {
     @Autowired
     private CardRepository cardRepository;
 
-    public HashMap<String, String> findByCardNumberAndCcv(String cardNumber, String ccv, HttpServletRequest request) {
+    public HashMap<String, String> findByCardNumberAndCcv(String cardNumber, String ccv) {
         HashMap<String, String> statusAndPreference = new HashMap<>();
         statusAndPreference.put("status","Verified");
         Card card = cardRepository.findByCardNumberAndCcv(cardNumber,ccv);
@@ -29,14 +28,10 @@ public class CardService {
         }
         else
             statusAndPreference.put("status","Unknown card");
-        if(statusAndPreference.get("status") == "Verified") {
-            request.getSession().setAttribute("isVerified","true");
-        }
         return  statusAndPreference;
     }
 
-    public String changeAuthenticationPreference(String cardNumber, String preference, HttpServletRequest request) {
-        Object isAuthenticated = request.getSession().getAttribute("isAuthenticated");
+    public String changeAuthenticationPreference(String cardNumber, String preference, String isAuthenticated) {
         if(isAuthenticated != null && isAuthenticated.equals("true")){
             Card card = cardRepository.findByCardNumber(cardNumber);
             try{
